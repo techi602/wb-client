@@ -1,0 +1,19 @@
+{
+  "name": "wb-client",
+  "version": "1.0.0",
+  "description": "uploading world buffs to server",
+  "main": "wb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/techi602/wb-client.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/techi602/wb-client/issues"
+  },
+  "homepage": "https://github.com/techi602/wb-client#readme"
+}
