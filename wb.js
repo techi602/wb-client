@@ -1,10 +1,11 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const https = require('https')
 
+const { resolve } = require('path');
+const { readdir } = require('fs').promises;
+
 var lastMod;
-var filename = './NovaWorldBuffs.lua';
-var realm = 'Zandalar Tribe';
-var faction = 'Horde';
+var filename;
 
 const ONY_TIMER = 6;
 const NEF_TIMER = 8;
@@ -87,7 +88,7 @@ function uploadData(data) {
 function formatTimer(name, timer) {
     let now = new Date();
     let text = name + ': ';
-    
+
     if (timer && timer.getTime() > now.getTime()) {
         let hh = timer.getHours();
         let mm = timer.getMinutes();
@@ -104,63 +105,108 @@ function formatTimer(name, timer) {
     return text;
 }
 
-function readFile() {
-    fs.readFile(filename, 'utf8', (err, str) => {
-        if (err) {
-            console.log(err);
-            process.exit(1);
-        }
+async function readFile() {
+    str = await fs.readFile(filename, 'utf8');
+    json = luaToJson(str);
+    let data = {};
+    realms.forEach((realm) => {
+        factions.forEach((faction) => {
+            if (typeof json.global[realm] !== 'undefined' && typeof json.global[realm][faction] !== 'undefined') {
+                realmData = {};
 
-        json = luaToJson(str);
+                realmData.onyTimer = json.global[realm][faction]['onyTimer'];
+                realmData.nefTimer = json.global[realm][faction]['nefTimer'];
+                realmData.rendTimer = json.global[realm][faction]['rendTimer'];
+                realmData.timezoneOffset = new Date().getTimezoneOffset();
 
-        let data = {};
+                var onyTimer = new Date((realmData.onyTimer + (ONY_TIMER * 3600)) * 1000);
+                var nefTimer = new Date((realmData.nefTimer + (NEF_TIMER * 3600)) * 1000);
+                var rendTimer = new Date((realmData.rendTimer + (REND_TIMER * 3600)) * 1000);
 
-        realms.forEach((realm) => {
-            factions.forEach((faction) => {
-                if (typeof json.global[realm] !== 'undefined' && typeof json.global[realm][faction] !== 'undefined') {
-                    realmData = {};
+                console.log(realm + ' ' + faction + ' => ');
+                console.log(formatTimer('Ony Timer', onyTimer));
+                console.log(formatTimer('Nef Timer', nefTimer));
+                console.log(formatTimer('Rend Timer', rendTimer));
 
-                    //realmData.realm = realm;
-                    //realmData.faction = faction;
-                    realmData.onyTimer = json.global[realm][faction]['onyTimer'];
-                    realmData.nefTimer = json.global[realm][faction]['nefTimer'];
-                    realmData.rendTimer = json.global[realm][faction]['rendTimer'];
-            
-                    var onyTimer = new Date((realmData.onyTimer + (ONY_TIMER * 3600)) * 1000);
-                    var nefTimer = new Date((realmData.nefTimer + (NEF_TIMER * 3600)) * 1000);
-                    var rendTimer = new Date((realmData.rendTimer + (REND_TIMER * 3600)) * 1000);
-            
-                    console.log(realm + ' ' + faction + ' => ');
-                    console.log(formatTimer('Ony Timer', onyTimer));
-                    console.log(formatTimer('Nef Timer', nefTimer));
-                    console.log(formatTimer('Rend Timer', rendTimer));
-
-                    if (typeof data[realm] === 'undefined') {
-                        data[realm] = {};
-                    }
-                    
-                    data[realm][faction] = realmData;
+                if (typeof data[realm] === 'undefined') {
+                    data[realm] = {};
                 }
-            })
-        });
 
-        console.log(JSON.stringify(data));
-        uploadData(data);
+                data[realm][faction] = realmData;
+            }
+        })
     });
+
+    return data;
 }
 
-function execute() {
-    fs.stat(filename, (err, stats) => {
-        if (stats.mtime.getMilliseconds() !== lastMod) {
-            lastMod = stats.mtime.getMilliseconds();
+async function printLogo() {
+    let version;
 
-            let seconds = (new Date().getTime() - stats.mtime) / 1000;
-            console.log(`Lua file modified ${seconds} ago`);
+    try {
+        const data = JSON.parse(await fs.readFile('./package.json', 'binary'));
+        version = data.version;
+    } catch (e) {
+        version = 'unknown';
+    }
 
-            readFile();
+    console.log('Classic World Buff Client version: ' + version)
+    console.log('');
+}
+
+async function* getFiles(dir) {
+    const dirents = await readdir(dir, { withFileTypes: true });
+    for (const dirent of dirents) {
+        const res = resolve(dir, dirent.name);
+        if (dirent.isDirectory()) {
+            yield* getFiles(res);
+        } else {
+            yield res;
         }
-    });
+    }
 }
 
-execute();
-setInterval(execute, 10000);
+async function getNWBFile() {
+    for await (const file of getFiles('../WTF')) {
+        if (file.endsWith('NovaWorldBuffs.lua')) {
+            return file;
+        }
+    }
+
+    return null;
+};
+
+async function loop() {
+    stats = await fs.stat(filename);
+    if (stats.mtime.getMilliseconds() !== lastMod) {
+        lastMod = stats.mtime.getMilliseconds();
+
+        let dateModified = new Date(stats.mtime);
+        console.log('NWB saved variables file modified: ' + dateModified.toString());
+
+        let data = await readFile();
+        uploadData(data);
+    }
+}
+
+// main
+(async () => {
+    await printLogo();
+
+    console.log('Looking for NovaWorldBuffs.lua file...');
+
+    filename = await getNWBFile();
+    if (!filename) {
+        console.log('NovaWorldBuffs.lua not found in your path. Check that addon is installed and your script is inside wow dir/__classic__/wb-client folder');
+        process.exit(1);
+    }
+
+    console.log('File found: ' + filename);
+
+    stats = await fs.stat(filename);
+    lastMod = stats.mtime.getMilliseconds();
+
+    console.log('Checking file for changes...');
+
+    setInterval(loop, 2000);
+})();

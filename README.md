@@ -12,18 +12,17 @@ The client will upload timers for all known realms and factions to the [world bu
 ## Installation
 
 Make sure you have [Nova World Buffs Addon](https://www.curseforge.com/wow/addons/nova-world-buffs) installed. 
-In order to run the client you will need [Node.js](https://nodejs.org/). Any version will do. Include binaries to your PATH. Node.js requires only 50MB on your drive. 
+In order to run the client you will need [Node.js](https://nodejs.org/). You need at least version 11+. Include binaries to your PATH. Node.js requires only 50MB on your drive. Do not install any extra developer tools. You dont need it.
 Node.js allows you to run programs in JavaScript to run on your computer. It is the same language like in your web browser. 
 After installation open cmd.exe and type "node -v" and you should see installed version. If not try to to restart your computer.
 
 [Download the files from this repository in ZIP archive](https://github.com/techi602/wb-client/archive/master.zip)
-Uncompress the files - currently in your SavedVariables folder
-c:\Games\World of Warcraft\_classic_\WTF\Account\{YOUR_ACCOUNT_ID}\SavedVariables\
-The folder should already contain file NovaWorldBuffs.lua
+Uncompress the folder to your classic folder i.e.:
+c:\Games\World of Warcraft\_classic_\wb-client
 
-Run the script in cmd.exe and type "node wb.js". The application will run in console until you close the console and show you current status.
+Run the script wb.cmd inside the wb-client folder (c:\Games\World of Warcraft\_classic_\wb-client\wb.cmd). The application will run in background until you close the console and show you what is going on.
 The script should be started automatically before you start your wow client.
 
 ## Issues
 
-I will simplify the installation so the script will try to detect the folder automatically and create CMD launch file / auto startup.
+In case of troubles open a issue here on github
