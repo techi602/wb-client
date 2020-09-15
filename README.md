@@ -18,10 +18,18 @@ After installation open cmd.exe and type "node -v" and you should see installed 
 
 [Download the files from this repository in ZIP archive](https://github.com/techi602/wb-client/archive/master.zip)
 Uncompress the folder to your classic folder i.e.:
-c:\Games\World of Warcraft\_classic_\wb-client
 
-Run the script wb.cmd inside the wb-client folder (c:\Games\World of Warcraft\_classic_\wb-client\wb.cmd). The application will run in background until you close the console and show you what is going on.
-The script should be started automatically before you start your wow client.
+```bash
+c:\Games\World of Warcraft\_classic_\wb-client
+```
+
+Run the script wb.cmd inside the wb-client folder 
+```bash
+c:\Games\World of Warcraft\_classic_\wb-client\wb.cmd
+```
+
+The script will be running in background until you close the console window.
+The script should be started before you start your wow client. You can setup automatic startup using shell:startup or scheduler. 
 
 ## Issues
 
