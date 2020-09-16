@@ -20,16 +20,16 @@ var jqry = document.createElement('script');
 jqry.src = "https://code.jquery.com/jquery-3.3.1.min.js";
 document.getElementsByTagName('head')[0].appendChild(jqry);
 
-jQuery('SortTable-col SortTable-data align-center').each(function(key, val) { 
-    console.log(key);
+let realms = [];
+jQuery('.SortTable-col').each(function(key, val) { 
+if ((key % 6) == 1 && key > 6)
+    realms.push($(this).text());
 });
-
+console.log(JSON.stringify(realms));
 */
 
-const realms = [
-    'Golemagg',
-    'Zandalar Tribe'
-];
+// EU classic realms
+const realms = ["Amnennar", "Ashbringer", "Auberdine", "Bloodfang", "Celebras", "Chromie", "Dragon's Call", "Dragonfang", "Dreadmist", "Earthshaker", "Everlook", "Finkle", "Firemaw", "Flamegor", "Flamelash", "Gandling", "Gehennas", "Golemagg", "Harbinger of Doom", "Heartstriker", "Hydraxian Waterlords", "Judgement", "Lakeshire", "Lucifron", "Mandokir", "Mirage Raceway", "Mograine", "Nethergarde Keep", "Noggenfogger", "Patchwerk", "Pyrewood Village", "Razorfen", "Razorgore", "Rhok'delar", "Shazzrah", "Skullflame", "Stonespine", "Sulfuron", "Ten Storms", "Transcendence", "Venoxis", "Wyrmthalak", "Zandalar Tribe"];
 
 const factions = [
     'Alliance',
@@ -114,10 +114,12 @@ async function readFile() {
             if (typeof json.global[realm] !== 'undefined' && typeof json.global[realm][faction] !== 'undefined') {
                 realmData = {};
 
+                // all timestamps should be in UTC - meaning timestamp should be the same regardless of the timezone of the client or the server
+
                 realmData.onyTimer = json.global[realm][faction]['onyTimer'];
                 realmData.nefTimer = json.global[realm][faction]['nefTimer'];
                 realmData.rendTimer = json.global[realm][faction]['rendTimer'];
-                realmData.timezoneOffset = new Date().getTimezoneOffset();
+                //realmData.timezoneOffset = new Date().getTimezoneOffset();
 
                 var onyTimer = new Date((realmData.onyTimer + (ONY_TIMER * 3600)) * 1000);
                 var nefTimer = new Date((realmData.nefTimer + (NEF_TIMER * 3600)) * 1000);
