@@ -36,7 +36,6 @@ const factions = [
     'Horde'
 ];
 
-
 function luaToJson(str) {
     let diff;
     do {  // replace curlies around arrays with square brackets
