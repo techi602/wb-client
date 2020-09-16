@@ -31,6 +31,24 @@ c:\Games\World of Warcraft\_classic_\wb-client\wb.cmd
 The script will be running in background until you close the console window.
 The script should be started before you start your wow client. You can setup automatic startup using shell:startup or scheduler. 
 
+Output should like this:
+
+```bash
+Classic World Buff Client version: 1.0.0
+
+Looking for NovaWorldBuffs.lua file...
+File found: d:\Games\World of Warcraft\_classic_\WTF\Account\124881497#1\SavedVariables\NovaWorldBuffs.lua
+Checking file for changes...
+NWB saved variables file modified: Wed Sep 16 2020 10:10:16 GMT+0200 (Central European Summer Time)
+Zandalar Tribe Horde => 
+Ony Timer: no timer
+Nef Timer: 17:34
+Rend Timer: 12:46
+Uploading payload to classic-wb-server.herokuapp.com:443...
+Payload uploaded: 200
+post received
+```
+
 ## Issues
 
 In case of troubles open a issue here on github
