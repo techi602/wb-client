@@ -37,7 +37,7 @@ Output should like this:
 Classic World Buff Client version: 1.0.0
 
 Looking for NovaWorldBuffs.lua file...
-File found: d:\Games\World of Warcraft\_classic_\WTF\Account\124881497#1\SavedVariables\NovaWorldBuffs.lua
+File found: d:\Games\World of Warcraft\_classic_\WTF\Account\12345#1\SavedVariables\NovaWorldBuffs.lua
 Checking file for changes...
 NWB saved variables file modified: Wed Sep 16 2020 10:10:16 GMT+0200 (Central European Summer Time)
 Zandalar Tribe Horde => 
