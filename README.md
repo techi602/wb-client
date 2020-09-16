@@ -11,7 +11,7 @@ The client will upload timers for all known realms and factions to the [world bu
 
 ## Installation
 
-Make sure you have [Nova World Buffs Addon](https://www.curseforge.com/wow/addons/nova-world-buffs) installed. 
+Make sure you have [Nova World Buffs Addon](https://www.curseforge.com/wow/addons/nova-world-buffs) installed and enabled for your account and character! 
 In order to run the client you will need [Node.js](https://nodejs.org/). You need at least version 11+. Include binaries to your PATH. Node.js requires only 50MB on your drive. Do not install any extra developer tools. You dont need it.
 Node.js allows you to run programs in JavaScript to run on your computer. It is the same language like in your web browser. 
 After installation open cmd.exe and type "node -v" and you should see installed version. If not try to to restart your computer.
